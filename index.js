@@ -1,35 +1,36 @@
 cheerio = require("cheerio");
 var http = require("http");
 var subid = "EE1j6Jc1k6a2a";
-
-
+var machine_id = "141354679220143123121721617210";
+var lm = "1410237435000";
 
 //================================================================================
 
   for (var i = 1; i <= 41; i++) {
   var vol = i;
   //console.log(gfu(vol, subid));
-  download(gfu(vol, "1410237435000"), function(data, subid, vol) {
+  download(gfu(vol, lm), function(data, subid, vol) {
     if (data) {
           var $ = cheerio.load(data);
           console.log(subid + ": " + vol + ": " + "http://www.make-digital.com" + $('a').attr('href'));
     }
   },
     subid,
-    vol);
+    vol,
+    machine_id); //after 2014/10/17 need machine_id to download 34~
   };
 
 
 //================================================================================
 
 
-function download(path, callback, subid, vol) {
+function download(path, callback, subid, vol, machine_id) {
   http.get({
        hostname:"www.make-digital.com",
        port: 80,
        path: path,
        headers:{
-          Cookie:"subscriber_id=" + subid + ";"
+          Cookie:"subscriber_id=" + subid + ";" + "machine_id=" + machine_id + ";"
        }
     }, function(res) {
     var data = "";
